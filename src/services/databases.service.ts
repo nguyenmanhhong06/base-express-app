@@ -1,5 +1,12 @@
 import { Collection, Db, MongoClient, ServerApiVersion } from 'mongodb'
+import { Bus } from '~/models/schemas/Bus.schema'
+import { Hotel } from '~/models/schemas/Hotel.schema'
+import { Location } from '~/models/schemas/Location.schema'
+import { Medias } from '~/models/schemas/Media.schema'
+import { Review } from '~/models/schemas/Review.schema'
+import { Transportation } from '~/models/schemas/Transportation.schema'
 import { User } from '~/models/schemas/User.schema'
+import { Booking } from '~/models/schemas/UserHotel.schema'
 
 const uri = `mongodb+srv://manhhong:123456789a@test.pxyp0xt.mongodb.net/test`
 
@@ -8,7 +15,7 @@ class DatabaseService {
   private db: Db
   constructor() {
     this.client = new MongoClient(uri)
-    this.db = this.client.db('your-name-db')
+    this.db = this.client.db('traveloka-db')
   }
   async connect() {
     try {
@@ -21,6 +28,27 @@ class DatabaseService {
 
   get user(): Collection<User> {
     return this.db.collection('users')
+  }
+  get hotel(): Collection<Hotel> {
+    return this.db.collection('hotels')
+  }
+  get bus(): Collection<Bus> {
+    return this.db.collection('buses')
+  }
+  get medias(): Collection<Medias> {
+    return this.db.collection('medias')
+  }
+  get booking(): Collection<Booking> {
+    return this.db.collection('bookings')
+  }
+  get location(): Collection<Location> {
+    return this.db.collection('locations')
+  }
+  get transportation(): Collection<Transportation> {
+    return this.db.collection('transportations')
+  }
+  get review(): Collection<Review> {
+    return this.db.collection('review')
   }
 }
 export const databaseService = new DatabaseService()

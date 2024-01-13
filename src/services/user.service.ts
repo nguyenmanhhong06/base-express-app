@@ -17,20 +17,19 @@ class UsersService {
     })
   }
   async register(payload: RegisterReqBody) {
-    const user_id = new ObjectId().toString()
-    await databaseService.user.insertOne(
+    const result = await databaseService.user.insertOne(
       new User({
-        ...payload,
-        _id: new ObjectId(user_id)
+        ...payload
       })
     )
-    const user = await databaseService.user.findOne({ _id: new ObjectId(user_id) })
-    const access_token = await this.signAccessToken({ user_id })
+    const user = await databaseService.user.findOne({ _id: result.insertedId })
+    const access_token = await this.signAccessToken({ user_id: result.insertedId.toString() })
     return { access_token, user }
   }
   async login({ user_id }: { user_id: string }) {
     const access_token = await this.signAccessToken({ user_id })
-    return { access_token }
+    const user = await databaseService.user.findOne({ _id: new ObjectId(user_id) })
+    return { access_token, user }
   }
 
   async getAllUser() {
@@ -47,6 +46,9 @@ class UsersService {
 
   async deleteUser(id: string) {
     return await databaseService.user.deleteOne({ _id: new ObjectId(id) })
+  }
+  async getMe(id: string) {
+    return await databaseService.user.findOne({ _id: new ObjectId(id) })
   }
 }
 
