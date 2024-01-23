@@ -1,5 +1,6 @@
 import { Collection, Db, MongoClient, ServerApiVersion } from 'mongodb'
 import { Bus } from '~/models/schemas/Bus.schema'
+import Conversation from '~/models/schemas/Conversation.schema'
 import { Hotel } from '~/models/schemas/Hotel.schema'
 import { Location } from '~/models/schemas/Location.schema'
 import { Medias } from '~/models/schemas/Media.schema'
@@ -49,6 +50,9 @@ class DatabaseService {
   }
   get review(): Collection<Review> {
     return this.db.collection('review')
+  }
+  get conversations(): Collection<Conversation> {
+    return this.db.collection('conversations')
   }
 }
 export const databaseService = new DatabaseService()
