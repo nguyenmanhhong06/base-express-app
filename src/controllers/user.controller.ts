@@ -20,6 +20,12 @@ export const getMeController = async (req: Request, res: Response, next: NextFun
   const result = await usersService.getMe(user_id)
   return res.json({ message: 'Get me success', result })
 }
+export const getUserController = async (req: Request, res: Response, next: NextFunction) => {
+  const { id } = req.params
+  console.log(id)
+  const result = await usersService.getUser(id)
+  return res.json({ message: 'Get me success', result })
+}
 export const getAllUserController = async (req: Request, res: Response, next: NextFunction) => {
   const result = await usersService.getAllUser()
   return res.json({ message: 'Get all user success', result })

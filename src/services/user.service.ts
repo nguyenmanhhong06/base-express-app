@@ -50,6 +50,9 @@ class UsersService {
   async getMe(id: string) {
     return await databaseService.user.findOne({ _id: new ObjectId(id) })
   }
+  async getUser(id: string) {
+    return await databaseService.user.findOne({ _id: new ObjectId(id) })
+  }
 }
 
 export const usersService = new UsersService()

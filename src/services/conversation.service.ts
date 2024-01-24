@@ -52,37 +52,47 @@ class ConversationService {
           }
         },
         {
+          $sort: {
+            created_at: -1 // Sắp xếp theo thứ tự giảm dần (tức là người gửi sau xuất hiện đầu tiên)
+          }
+        },
+        {
           $group: {
-            _id: '$receiver_id',
-            firstRecord: {
-              $first: '$$ROOT'
+            _id: null,
+            users: {
+              $addToSet: {
+                $cond: {
+                  if: {
+                    $eq: ['$sender_id', new ObjectId(user_id)]
+                  },
+                  then: '$receiver_id',
+                  else: '$sender_id'
+                }
+              }
             }
           }
         },
         {
-          $replaceRoot: {
-            newRoot: '$firstRecord'
-          }
+          $unwind: '$users'
         },
         {
-          $match: {
-            receiver_id: {
-              $ne: new ObjectId(user_id)
-            }
+          $project: {
+            _id: 0,
+            userId: '$users'
           }
         },
         {
           $lookup: {
             from: 'users',
-            localField: 'receiver_id',
+            localField: 'userId',
             foreignField: '_id',
-            as: 'user'
+            as: 'result'
           }
         },
         {
           $addFields: {
-            user: {
-              $arrayElemAt: ['$user', 0]
+            result: {
+              $arrayElemAt: ['$result', 0]
             }
           }
         }
